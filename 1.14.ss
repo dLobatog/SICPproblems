@@ -4,3 +4,6 @@
 ; steps used by this process as the amount to be changed increases?
 
 ; See attached jpg
+;
+; Time: O(amount^5)
+; Space: O(amount)
