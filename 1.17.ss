@@ -32,7 +32,9 @@
 (define (halve n)
   (/ n 2)) 
 
-(define (* a b)
-  (if (= b 0)
-    0
-    (+ a (* a (- b 1))))) 
+(define (my-mult a b)
+  (cond ((even? b) (my-mult 2 (my-mult a (halve b))))
+        (else (+ a (* a (- b 1))))))
+
+; a * b = 2a * (b/2) - even
+; a * b = a + a *(b-1) - odd
