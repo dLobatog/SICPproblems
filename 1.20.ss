@@ -1,0 +1,127 @@
+;The process that a procedure generates is of course
+;dependent on the rules used by the interpreter. As an example,
+;consider the iterative gcd procedure given above. Suppose we
+;were to interpret this procedure using normal-order evaluation,
+;as discussed in Section 1.1.5. (The normal-order-evaluation rule
+;for if is described in Exercise 1.5.) Using the substitution method
+;(for normal order), illustrate the process generated in evaluating
+;(gcd 206 40) and indicate the remainder operations that are
+;actually performed. How many remainder operations are actually
+;performed in the normal-order evaluation of (gcd 206 40)? In
+;the applicative-order evaluation?
+;
+;Solution: The algorithm in question is Euclids Algorithm
+
+(define (gcd a b)
+  (if (= b 0)
+    a
+    (gcd b (remainder a b))))
+
+(gcd 206 40)
+
+(if (= 40 0)
+    206
+    (gcd 40 (remainder 206 40)))
+
+(gcd 40 (remainder 206 40))
+
+(if (= (remainder 206 40) 0)
+    40
+    (gcd (remainder 206 40) (remainder 40 (remainder 206 40))))
+
+(if (= 6 0) ;; 1 remainder evaluated
+    40
+    (gcd (remainder 206 40) (remainder 40 (remainder 206 40))))
+
+(gcd (remainder 206 40) (remainder 40 (remainder 206 40)))
+
+(if (= (remainder 40 (remainder 206 40)) 0)
+    (remainder 206 40)
+    (gcd (remainder 40 (remainder 206 40))
+         (remainder (remainder 206 40)
+                    (remainder 40 (remainder 206 40)))))
+
+;At this point both of the nested remainder operations that were substituted in for b in the (= b 0) procedure need to be evaluated. I'll combine these and show them as one step.
+
+(if (= 4 0) ;; 2 remainders evaluated
+    (remainder 206 40)
+    (gcd (remainder 40 (remainder 206 40))
+         (remainder (remainder 206 40)
+                    (remainder 40 (remainder 206 40)))))
+
+(gcd (remainder 40 (remainder 206 40))
+     (remainder (remainder 206 40)
+                (remainder 40 (remainder 206 40))))
+
+(if (= (remainder (remainder 206 40)
+                  (remainder 40 (remainder 206 40)))
+       0)
+       (remainder 40 (remainder 206 40))
+       (gcd (remainder (remainder 206 40)
+                       (remainder 40 (remainder 206 40)))
+            (remainder (remainder 40 (remainder 206 40))
+                       (remainder (remainder 206 40)
+                                  (remainder 40 (remainder 206 40))))))
+
+;Here again, multiple nested remainder operations that were substituted in for b in the (= b 0) procedure need to be evaluated. I'll combine all four and show them as one step.
+;
+(if (= 2 0) ;; 4 remainders evaluated
+    (remainder 40 (remainder 206 40))
+    (gcd (remainder (remainder 206 40)
+                    (remainder 40 (remainder 206 40)))
+         (remainder (remainder 40 (remainder 206 40))
+                    (remainder (remainder 206 40)
+                               (remainder 40 (remainder 206 40))))))
+
+(gcd (remainder (remainder 206 40)
+                (remainder 40 (remainder 206 40)))
+     (remainder (remainder 40 (remainder 206 40))
+                (remainder (remainder 206 40)
+                           (remainder 40 (remainder 206 40)))))
+
+(if (= (remainder (remainder 40 (remainder 206 40))
+                  (remainder (remainder 206 40)
+                             (remainder 40 (remainder 206 40)))) 0)
+    (remainder (remainder 206 40)
+               (remainder 40 (remainder 206 40)))
+    (gcd (remainder (remainder 40 (remainder 206 40))
+                    (remainder (remainder 206 40)
+                               (remainder 40 (remainder 206 40))))
+         (remainder (remainder (remainder 206 40)
+                               (remainder 40 (remainder 206 40)))
+                    (remainder (remainder 40 (remainder 206 40))
+                               (remainder (remainder 206 40)
+                                          (remainder 40
+                                                     (remainder 206 40)))))))
+
+;There are seven nested remainder operations to evaluate at this point.
+
+(if (= 0 0) ;; 7 remainders evaluated
+    (remainder (remainder 206 40)
+               (remainder 40 (remainder 206 40)))
+    (gcd (remainder (remainder 40 (remainder 206 40))
+                    (remainder (remainder 206 40)
+                               (remainder 40 (remainder 206 40))))
+         (remainder (remainder (remainder 206 40)
+                               (remainder 40 (remainder 206 40)))
+                    (remainder (remainder 40 (remainder 206 40))
+                               (remainder (remainder 206 40)
+                                          (remainder 40
+                                                     (remainder 206
+                                                                40)))))))
+
+(remainder (remainder 206 40)
+           (remainder 40 (remainder 206 40)))
+
+;Finally, we can evaluate these four remainder operations to come up with the answer (GCD) and the total.
+2 ;; 18 total remainders evaluated
+
+; (gcd 206 40), applicative-order
+; (gcd 40 (remainder 206 40))
+; (gcd 6 (remainder 40 6))
+; (gcd 4 (remainder 6 4))
+; (gcd 2 (remainder 4 2))
+;
+; 2 is the solution, 4 remainder operations.
+;
+; applicative-order >>>>> normal-order performance :)
