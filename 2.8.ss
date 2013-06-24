@@ -4,5 +4,5 @@
 
 ; This requires x to be strictly greater than y
 (define (sub-interval x y)
-  (make-interval (- (lower-bound x) (lower-bound y))
-                 (- (upper-bound x) (upper-bound y))))
+  (make-interval (- (lower-bound x) (upper-bound y))
+                 (- (upper-bound x) (lower-bound y))))
