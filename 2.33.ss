@@ -3,11 +3,11 @@
 ;accumulations:
 
 (define (map p sequence)
-  (accumulate (lambda (x y) 〈??〉) nil sequence))
+  (accumulate (lambda (x total) (cons (p x) total)) '() sequence))
 (define (append seq1 seq2)
   (accumulate cons seq2 seq1))
 (define (length sequence)
-  (accumulate (lambda (x y) (+ y 1)) 0 sequence))
+  (accumulate (lambda (x total) (+ total 1)) 0 sequence))
 
 ; ----------------
 
