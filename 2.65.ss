@@ -30,13 +30,3 @@
   (list->tree (intersection-list (tree->list-2 tree1)
                                  (tree->list-2 tree2))))
 
-
-(define (union-set set1 set2)
-  (cond ((null? set1) set2)
-        (else (union-set (cdr set1) (adjoin-set (car set1) set2)))))
-
-(define (intersection-set set1 set2))
-; check root,
-; check left subtree  (intersection-set (left-subtree set1) set2)
-; check right subtree (intersection-set (right-subtree set1) set2)
-
